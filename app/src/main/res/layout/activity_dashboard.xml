@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_gravity="center">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/scanReceiptBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Scan Receipt" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/addManuallyBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Manually" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/viewHistoryBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="History" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/statisticsBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Statistics" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/settingsBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Settings" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/logoutBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Logout" />
+
+    </LinearLayout>
+</ScrollView>

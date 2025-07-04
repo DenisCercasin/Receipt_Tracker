@@ -1,0 +1,12 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Receipt_scanner" parent="Theme.Material3.Light">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+        <item name ="android:forceDarkAllowed">false</item>
+    </style>
+
+    <style name="Theme.Receipt_scanner" parent="Base.Theme.Receipt_scanner" />
+
+</resources>
