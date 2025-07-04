@@ -35,15 +35,5 @@ class DashboardActivity : AppCompatActivity() {
         binding.scanReceiptBtn.setOnClickListener{
             startActivity(Intent(this, ScanReceiptActivity::class.java))
         }
-        // Примеры обработки нажатий
-//        binding.scanReceiptBtn.setOnClickListener {
-//            // TODO: Запуск сканирования
-//        }
-//
-//        binding.viewHistoryBtn.setOnClickListener {
-//            // TODO: Показ истории
-//        }
-
-        // Добавь обработчики для всех остальных кнопок
     }
 }

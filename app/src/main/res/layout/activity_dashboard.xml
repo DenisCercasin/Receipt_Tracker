@@ -1,53 +1,278 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="24dp"
+    android:background="?android:colorBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center"
-        android:layout_gravity="center">
+        android:gravity="center_horizontal">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/scanReceiptBtn"
+        <!-- Title -->
+        <TextView
+            android:id="@+id/dashboardTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dashboard"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="?android:textColorPrimary"
+            android:layout_marginBottom="24dp" />
+
+        <!-- 🔍 Scan Receipt -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Scan Receipt" />
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:strokeWidth="1dp">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/addManuallyBtn"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:gravity="center_vertical">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/ic_scan"
+                    android:contentDescription="Scan"
+                    android:scaleType="centerCrop"
+                    app:cornerSize="50%"
+                    app:strokeColor="@color/md_theme_primary"
+                    app:strokeWidth="1dp"
+                    android:backgroundTint="@color/md_theme_primaryContainer"
+                    android:padding="8dp"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/scanReceiptBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:text="Scan Receipt"
+                    android:backgroundTint="@color/md_theme_primaryContainer"
+                    android:textColor="@color/md_theme_onPrimaryContainer"
+                    app:cornerRadius="12dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ➕ Add Manually -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Add Manually" />
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:strokeWidth="1dp">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/viewHistoryBtn"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:gravity="center_vertical">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/ic_add"
+                    android:contentDescription="Add"
+                    android:scaleType="centerCrop"
+                    app:cornerSize="50%"
+                    app:strokeColor="@color/md_theme_primary"
+                    app:strokeWidth="1dp"
+                    android:backgroundTint="@color/md_theme_primaryContainer"
+                    android:padding="8dp"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/addManuallyBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:text="Add Manually"
+                    android:backgroundTint="@color/md_theme_primaryContainer"
+                    android:textColor="@color/md_theme_onPrimaryContainer"
+                    app:cornerRadius="12dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 📜 View History -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="History" />
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:strokeWidth="1dp">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/statisticsBtn"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:gravity="center_vertical">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/ic_history"
+                    android:contentDescription="History"
+                    android:scaleType="centerCrop"
+                    app:cornerSize="50%"
+                    app:strokeColor="@color/md_theme_primary"
+                    app:strokeWidth="1dp"
+                    android:backgroundTint="@color/md_theme_primaryContainer"
+                    android:padding="8dp"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/viewHistoryBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:text="View History"
+                    android:backgroundTint="@color/md_theme_primaryContainer"
+                    android:textColor="@color/md_theme_onPrimaryContainer"
+                    app:cornerRadius="12dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 📊 Statistics -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Statistics" />
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:strokeWidth="1dp">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/settingsBtn"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:gravity="center_vertical">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/ic_statistics"
+                    android:contentDescription="Statistics"
+                    android:scaleType="centerCrop"
+                    app:cornerSize="50%"
+                    app:strokeColor="@color/md_theme_primary"
+                    app:strokeWidth="1dp"
+                    android:backgroundTint="@color/md_theme_primaryContainer"
+                    android:padding="8dp"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/statisticsBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:text="Statistics"
+                    android:backgroundTint="@color/md_theme_primaryContainer"
+                    android:textColor="@color/md_theme_onPrimaryContainer"
+                    app:cornerRadius="12dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ⚙️ Settings -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Settings" />
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:strokeWidth="1dp">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/logoutBtn"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:gravity="center_vertical">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/ic_settings"
+                    android:contentDescription="Settings"
+                    android:scaleType="centerCrop"
+                    app:cornerSize="50%"
+                    app:strokeColor="@color/md_theme_primary"
+                    app:strokeWidth="1dp"
+                    android:backgroundTint="@color/md_theme_primaryContainer"
+                    android:padding="8dp"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/settingsBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:text="Settings"
+                    android:backgroundTint="@color/md_theme_primaryContainer"
+                    android:textColor="@color/md_theme_onPrimaryContainer"
+                    app:cornerRadius="12dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 🚪 Logout -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Logout" />
+            android:layout_marginBottom="24dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:strokeColor="@color/md_theme_error"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:gravity="center_vertical">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/ic_logout"
+                    android:contentDescription="Logout"
+                    android:scaleType="centerCrop"
+                    app:cornerSize="50%"
+                    app:strokeColor="@color/md_theme_error"
+                    app:strokeWidth="1dp"
+                    android:backgroundTint="@android:color/transparent"
+                    android:padding="8dp"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/logoutBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:text="Logout"
+                    android:textColor="@color/md_theme_error"
+                    android:backgroundTint="@android:color/transparent"
+                    app:strokeColor="@color/md_theme_error"
+                    app:strokeWidth="1dp"
+                    app:icon="@drawable/ic_logout"
+                    app:iconTint="@color/md_theme_error"
+                    app:cornerRadius="12dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
 </ScrollView>
