@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">receipt_scanner</string>
+    <string name="app_name">Receipt Scanner</string>
     <string name="no_data">Not Signed In</string>
     <string name="sign_in">Sign In</string>
     <string name="sign_out">Sign Out</string>
@@ -20,4 +20,7 @@
         <item>Health</item>
         <item>Other</item>
     </string-array>
+
+    <string name="navigation_drawer_open">Open drawer</string>
+    <string name="navigation_drawer_close">Close drawer</string>
 </resources>
