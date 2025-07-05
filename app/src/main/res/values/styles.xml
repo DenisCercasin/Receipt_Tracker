@@ -6,4 +6,10 @@
         <item name="android:textColor">#FFFFFF</item>
     </style>
 
+    <style name="BottomNavTextBold" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:paddingTop">4dp</item> <!-- Creates space between icon and text -->
+
+    </style>
 </resources>

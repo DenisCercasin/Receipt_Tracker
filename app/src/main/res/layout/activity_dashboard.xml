@@ -7,296 +7,149 @@
     android:layout_height="match_parent"
     android:background="?android:colorBackground">
 
+    <!-- Background image goes here -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/bg_pattern"
+        android:scaleType="centerCrop"
+        android:alpha="0.56" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <!-- Top App Bar with Hamburger -->
+
+        <!-- Bottom Navigation Bar -->
+
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/topAppBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
+            android:background="@color/moldova_background_theme"
             android:title="Dashboard"
             android:titleTextColor="@android:color/white"
             app:navigationIcon="@drawable/ic_menu" />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:padding="24dp">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal">
-
-        <!-- 🔍 Scan Receipt -->
-        <com.google.android.material.card.MaterialCardView
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
-            app:strokeWidth="1dp">
+            android:layout_height="346dp"
+            android:layout_weight="1"
+            android:padding="24dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="16dp">
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
-                    android:backgroundTint="@color/md_theme_primaryContainer"
-                    android:contentDescription="Scan"
-                    android:padding="8dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_scan"
-                    app:cornerSize="50%"
-                    app:strokeColor="@color/md_theme_primary"
-                    app:strokeWidth="1dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/scanReceiptBtn"
-                    android:layout_width="0dp"
+                <!-- 🔍 Scan Receipt -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/md_theme_primaryContainer"
-                    android:text="Scan Receipt"
-                    android:textColor="@color/md_theme_onPrimaryContainer"
-                    app:cornerRadius="12dp" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp"
+                    app:strokeWidth="1dp">
 
-        <!-- ➕ Add Manually -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
-            app:strokeWidth="1dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="16dp">
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
+                            android:backgroundTint="@color/md_theme_primaryContainer"
+                            android:contentDescription="Scan"
+                            android:padding="8dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_scan"
+                            app:cornerSize="50%"
+                            app:strokeColor="@color/md_theme_primary"
+                            app:strokeWidth="1dp" />
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
-                    android:backgroundTint="@color/md_theme_primaryContainer"
-                    android:contentDescription="Add"
-                    android:padding="8dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_add"
-                    app:cornerSize="50%"
-                    app:strokeColor="@color/md_theme_primary"
-                    app:strokeWidth="1dp" />
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/scanReceiptBtn"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="@color/md_theme_primaryContainer"
+                            android:text="Scan Receipt"
+                            android:textColor="@color/md_theme_onPrimaryContainer"
+                            app:cornerRadius="12dp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/addManuallyBtn"
-                    android:layout_width="0dp"
+                <!-- ➕ Add Manually -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/md_theme_primaryContainer"
-                    android:text="Add Manually"
-                    android:textColor="@color/md_theme_onPrimaryContainer"
-                    app:cornerRadius="12dp" />
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
+                            android:backgroundTint="@color/md_theme_primaryContainer"
+                            android:contentDescription="Add"
+                            android:padding="8dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_add"
+                            app:cornerSize="50%"
+                            app:strokeColor="@color/md_theme_primary"
+                            app:strokeWidth="1dp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/addManuallyBtn"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="@color/md_theme_primaryContainer"
+                            android:text="Add Manually"
+                            android:textColor="@color/md_theme_onPrimaryContainer"
+                            app:cornerRadius="12dp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- 📜 View History -->
+
+                <!-- 📊 Statistics -->
+
+                <!-- ⚙️ Settings -->
+
+                <!-- 🚪 Logout -->
+
             </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+        </ScrollView>
 
-        <!-- 📜 View History -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
-            app:strokeWidth="1dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="16dp">
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
-                    android:backgroundTint="@color/md_theme_primaryContainer"
-                    android:contentDescription="History"
-                    android:padding="8dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_history"
-                    app:cornerSize="50%"
-                    app:strokeColor="@color/md_theme_primary"
-                    app:strokeWidth="1dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/viewHistoryBtn"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/md_theme_primaryContainer"
-                    android:text="View History"
-                    android:textColor="@color/md_theme_onPrimaryContainer"
-                    app:cornerRadius="12dp" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- 📊 Statistics -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
-            app:strokeWidth="1dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="16dp">
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
-                    android:backgroundTint="@color/md_theme_primaryContainer"
-                    android:contentDescription="Statistics"
-                    android:padding="8dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_statistics"
-                    app:cornerSize="50%"
-                    app:strokeColor="@color/md_theme_primary"
-                    app:strokeWidth="1dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/statisticsBtn"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/md_theme_primaryContainer"
-                    android:text="Statistics"
-                    android:textColor="@color/md_theme_onPrimaryContainer"
-                    app:cornerRadius="12dp" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- ⚙️ Settings -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
-            app:strokeWidth="1dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="16dp">
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
-                    android:backgroundTint="@color/md_theme_primaryContainer"
-                    android:contentDescription="Settings"
-                    android:padding="8dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_settings"
-                    app:cornerSize="50%"
-                    app:strokeColor="@color/md_theme_primary"
-                    app:strokeWidth="1dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/settingsBtn"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/md_theme_primaryContainer"
-                    android:text="Settings"
-                    android:textColor="@color/md_theme_onPrimaryContainer"
-                    app:cornerRadius="12dp" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- 🚪 Logout -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
-            app:strokeColor="@color/md_theme_error"
-            app:strokeWidth="1dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="16dp">
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
-                    android:backgroundTint="@android:color/transparent"
-                    android:contentDescription="Logout"
-                    android:padding="8dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_logout"
-                    app:cornerSize="50%"
-                    app:strokeColor="@color/md_theme_error"
-                    app:strokeWidth="1dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/logoutBtn"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_weight="1"
-                    android:backgroundTint="@android:color/transparent"
-                    android:text="Logout"
-                    android:textColor="@color/md_theme_error"
-                    app:cornerRadius="12dp"
-                    app:icon="@drawable/ic_logout"
-                    app:iconTint="@color/md_theme_error"
-                    app:strokeColor="@color/md_theme_error"
-                    app:strokeWidth="1dp" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-    </LinearLayout>
-    </ScrollView>
-
-    <!-- Bottom Navigation Bar -->
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
+            android:background="@color/moldova_background_theme"
             app:menu="@menu/bottom_nav_menu"
             app:itemIconTint="@color/nav_icon_selector"
-            app:itemTextColor="@color/nav_text_selector" />
+            app:itemTextColor="@color/black"
+            app:itemIconSize="21dp"
+        app:itemTextAppearanceActive="@style/BottomNavTextBold"
+            app:itemTextAppearanceInactive="@style/BottomNavTextBold"
+            app:itemBackground="@drawable/bottom_nav_item_background"/>
     </LinearLayout>
 
     <!-- Navigation Drawer -->

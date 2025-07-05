@@ -7,7 +7,9 @@
         android:required="false" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA" android:required="false" />
+    <uses-permission
+        android:name="android.permission.CAMERA"
+        android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -19,6 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Receipt_scanner"
         tools:targetApi="31">
+        <activity
+            android:name=".BaseActivity"
+            android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -29,6 +34,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
         <activity
             android:name=".ScanReceiptActivity"
             android:exported="false" />

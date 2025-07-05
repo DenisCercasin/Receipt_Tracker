@@ -3,11 +3,10 @@ package com.example.receipt_scanner
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import com.example.receipt_scanner.databinding.ActivityDashboardBinding
 
-class DashboardActivity : AppCompatActivity() {
+class DashboardActivity : BaseActivity() {
 
     private lateinit var binding: ActivityDashboardBinding
     private lateinit var drawerToggle: ActionBarDrawerToggle
@@ -35,8 +34,8 @@ class DashboardActivity : AppCompatActivity() {
         binding.navigationView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_dashboard -> { /* Already here */ }
+                R.id.nav_history -> startActivity(Intent(this, HistoryActivity::class.java))
                 R.id.nav_statistics -> startActivity(Intent(this, StatisticsActivity::class.java))
-                R.id.nav_add_manually -> startActivity(Intent(this, AddExpenseActivity::class.java))
                 R.id.nav_settings -> startActivity(Intent(this, SettingsActivity::class.java))
                 R.id.nav_logout -> {
                     // Optional logout logic here
@@ -49,8 +48,8 @@ class DashboardActivity : AppCompatActivity() {
         // 🟢 Bottom Navigation clicks
         binding.bottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.nav_history -> startActivity(Intent(this, HistoryActivity::class.java))
                 R.id.nav_statistics -> startActivity(Intent(this, StatisticsActivity::class.java))
+                R.id.nav_add_manually -> startActivity(Intent(this, AddExpenseActivity::class.java))
                 R.id.nav_settings -> startActivity(Intent(this, SettingsActivity::class.java))
             }
             true
@@ -61,17 +60,17 @@ class DashboardActivity : AppCompatActivity() {
             startActivity(Intent(this, AddExpenseActivity::class.java))
         }
 
-        binding.viewHistoryBtn.setOnClickListener {
-            startActivity(Intent(this, HistoryActivity::class.java))
-        }
-
-        binding.settingsBtn.setOnClickListener {
-            startActivity(Intent(this, SettingsActivity::class.java))
-        }
-
-        binding.statisticsBtn.setOnClickListener {
-            startActivity(Intent(this, StatisticsActivity::class.java))
-        }
+//        binding.viewHistoryBtn.setOnClickListener {
+//            startActivity(Intent(this, HistoryActivity::class.java))
+//        }
+//
+//        binding.settingsBtn.setOnClickListener {
+//            startActivity(Intent(this, SettingsActivity::class.java))
+//        }
+//
+//        binding.statisticsBtn.setOnClickListener {
+//            startActivity(Intent(this, StatisticsActivity::class.java))
+//        }
 
         binding.scanReceiptBtn.setOnClickListener {
             startActivity(Intent(this, ScanReceiptActivity::class.java))

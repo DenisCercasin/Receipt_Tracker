@@ -1,0 +1,31 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- ✅ Selected state -->
+    <item android:state_checked="true">
+        <inset
+            android:insetLeft="8dp"
+            android:insetRight="8dp"
+            android:insetTop="4dp"
+            android:insetBottom="4dp">
+            <shape android:shape="rectangle">
+                <solid android:color="#FFFCF2" />
+                <corners android:radius="16dp" />
+            </shape>
+        </inset>
+    </item>
+
+    <!-- 🔘 Default (unselected) state -->
+    <item>
+        <inset
+            android:insetLeft="8dp"
+            android:insetRight="8dp"
+            android:insetTop="4dp"
+            android:insetBottom="4dp">
+            <shape android:shape="rectangle">
+                <solid android:color="#66FFFFFF" /> <!-- 40% opacity -->
+                <corners android:radius="16dp" />
+            </shape>
+        </inset>
+    </item>
+
+</selector>
