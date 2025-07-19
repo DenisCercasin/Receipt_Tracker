@@ -327,7 +327,7 @@ class ScanReceiptActivity : AppCompatActivity() {
 
 
     private fun openManualEntryScreen(amount: Double, category: String,dateString: String?) {
-        val intent = Intent(this, AddExpenseActivity::class.java).apply {
+        val intent = Intent(this, EditExpenseActivity::class.java).apply {
             putExtra("prefill_amount", amount)
             putExtra("prefill_category", category)
             putExtra("prefill_date", dateString)

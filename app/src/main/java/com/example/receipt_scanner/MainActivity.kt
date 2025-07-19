@@ -33,27 +33,18 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.signIn.setOnClickListener{
-            startActivity(Intent(this, RegisterActivity::class.java))
-            finish()
+        binding.loginButton.setOnClickListener {
+            startActivity(Intent(this, LoginActivity::class.java))
         }
 
-        binding.signOut.setOnClickListener{
-            auth.signOut()
-            binding.userDetails.text=updateData()
+        binding.registerButton.setOnClickListener {
+            startActivity(Intent(this, RegisterActivity::class.java))
         }
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        binding.userDetails.text=updateData()
-    }
-    private fun updateData(): String{
-        return "Email : ${auth.currentUser?.email}"
     }
 }
