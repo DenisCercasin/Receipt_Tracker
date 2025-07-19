@@ -5,51 +5,74 @@
     android:id="@+id/scan_receipt_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#D6D5C9"
     android:padding="24dp">
 
+    <!-- 🟢 Title -->
     <TextView
         android:id="@+id/tv_scan_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Scan Your Receipt"
-        android:textSize="22sp"
+        android:text="Scan your receipt"
+        android:textSize="36sp"
         android:textStyle="bold"
+        android:textColor="#333333"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="32dp"/>
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="8dp" />
 
-    <Button
-        android:id="@+id/btn_scan_receipt"
+    <!-- 🧾 Card with icon + button inside -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardScan"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Scan Receipt"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="6dp"
         app:layout_constraintTop_toBottomOf="@id/tv_scan_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp" />
+        app:layout_constraintVertical_bias="1.0"
+        android:layout_margin="16dp">
 
-    <!-- You can optionally show an image preview -->
-    <ImageView
-        android:id="@+id/iv_receipt_preview"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:scaleType="centerCrop"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/btn_scan_receipt"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginTop="24dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="592dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="24dp">
 
+            <!-- 🧾 SVG Icon -->
+            <ImageView
+                android:id="@+id/ivIcon"
+                android:layout_width="199dp"
+                android:layout_height="470dp"
+                android:layout_marginBottom="24dp"
+                android:contentDescription="Receipt icon"
+                android:src="@drawable/ic_scan" />
+
+            <!-- 🟢 Scan Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_scan_receipt"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Scan Receipt"
+                app:cornerRadius="12dp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- 🔄 Optional ProgressBar -->
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        android:layout_gravity="center"
-        android:layout_centerInParent="true" />
-
-
+        app:layout_constraintTop_toBottomOf="@id/cardScan"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

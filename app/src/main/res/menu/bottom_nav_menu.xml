@@ -9,18 +9,15 @@
         android:enabled="false"
         android:visible="false" />
 
-    <item
-        android:id="@+id/nav_statistics"
-        android:icon="@drawable/ic_statistics"
-        android:title="Statistics" />
-
+    <!-- Add Manually -->
     <item
         android:id="@+id/nav_add_manually"
         android:icon="@drawable/ic_add"
-        android:title="Add" />
+        android:title="Add Manually" />
 
+    <!-- Scan Receipt -->
     <item
-        android:id="@+id/nav_settings"
-        android:icon="@drawable/ic_settings"
-        android:title="Settings" />
+        android:id="@+id/nav_scan_receipt"
+        android:icon="@drawable/ic_scan"
+        android:title="Scan Receipt" />
 </menu>
