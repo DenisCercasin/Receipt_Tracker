@@ -1,17 +1,16 @@
 package com.example.receipt_scanner
 
-import android.app.DatePickerDialog
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.receipt_scanner.databinding.ActivityAddExpenseBinding
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -71,25 +70,17 @@ class AddExpenseActivity : AppCompatActivity() {
 
         // 📅 Открываем календарь по нажатию на поле даты
         binding.dateET.setOnClickListener {
-            val now = Calendar.getInstance()
-            val year = now.get(Calendar.YEAR)
-            val month = now.get(Calendar.MONTH)
-            val day = now.get(Calendar.DAY_OF_MONTH)
+            val picker = MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select Date")
+                .build()
 
-            val datePicker = DatePickerDialog(
-                this,
-                { _, selectedYear, selectedMonth, selectedDay ->
-                    val selectedDate = String.format(
-                        "%04d-%02d-%02d",
-                        selectedYear,
-                        selectedMonth + 1,
-                        selectedDay
-                    )
-                    binding.dateET.setText(selectedDate)
-                },
-                year, month, day
-            )
-            datePicker.show()
+            picker.show(supportFragmentManager, picker.toString())
+
+            picker.addOnPositiveButtonClickListener { selection ->
+                val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                    .format(Date(selection))
+                binding.dateET.setText(date)
+            }
         }
 
         // 💾 Сохраняем расход по нажатию на кнопку
