@@ -1,12 +1,16 @@
 package com.example.receipt_scanner
 
+import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.NumberPicker
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.toColorInt
+import androidx.drawerlayout.widget.DrawerLayout
 import com.example.receipt_scanner.model.Expense
-import com.example.receipt_scanner.util.MonthYearPickerDialog
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.XAxis
@@ -18,6 +22,8 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
+import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Calendar
@@ -28,9 +34,11 @@ class StatisticsActivity : AppCompatActivity() {
 
     private lateinit var pieChart: PieChart
     private lateinit var barChart: BarChart
-    private var selectedMonth: Calendar = Calendar.getInstance()
+    private var selectedDate: Calendar? = Calendar.getInstance()
     private lateinit var firestore: FirebaseFirestore
     private lateinit var userId: String
+    private lateinit var drawerToggle: ActionBarDrawerToggle
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +51,48 @@ class StatisticsActivity : AppCompatActivity() {
         firestore = FirebaseFirestore.getInstance()
         userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
+        // Set up toolbar
+        val topAppBar = findViewById<MaterialToolbar>(R.id.topAppBar)
+        setSupportActionBar(topAppBar)
+        supportActionBar?.title = "Statistics"
+
+
+// Set up drawer toggle
+        drawerToggle = ActionBarDrawerToggle(
+            this,
+            findViewById(R.id.drawerLayout),
+            topAppBar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        )
+        findViewById<DrawerLayout>(R.id.drawerLayout).addDrawerListener(drawerToggle)
+        drawerToggle.syncState()
+
+// Set up navigation
+        findViewById<NavigationView>(R.id.navigationView).setNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_dashboard -> startActivity(Intent(this, DashboardActivity::class.java))
+                R.id.nav_history -> startActivity(Intent(this, HistoryActivity::class.java))
+                R.id.nav_settings -> startActivity(Intent(this, SettingsActivity::class.java))
+                R.id.nav_logout -> {
+                    AlertDialog.Builder(this)
+                        .setTitle("Logout")
+                        .setMessage("Are you sure you want to log out?")
+                        .setPositiveButton("Yes") { _, _ ->
+                            FirebaseAuth.getInstance().signOut()
+                            val intent = Intent(this, MainActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            startActivity(intent)
+                        }
+                        .setNegativeButton("Cancel", null)
+                        .show()
+                    true
+                }
+            }
+            findViewById<DrawerLayout>(R.id.drawerLayout).closeDrawers()
+            true
+        }
+
         btnSelectMonth.setOnClickListener {
             showMonthPicker()
         }
@@ -51,43 +101,69 @@ class StatisticsActivity : AppCompatActivity() {
     }
 
     private fun showMonthPicker() {
-        val year = selectedMonth.get(Calendar.YEAR)
-        val month = selectedMonth.get(Calendar.MONTH)
+        val calendar = Calendar.getInstance()
+        val currentYear = calendar.get(Calendar.YEAR)
+        val currentMonth = calendar.get(Calendar.MONTH)
 
-        val dialog = MonthYearPickerDialog(this, { y, m ->
-            selectedMonth.set(Calendar.YEAR, y)
-            selectedMonth.set(Calendar.MONTH, m)
+        val dialogView = layoutInflater.inflate(R.layout.dialog_month_year_picker, null)
+        val monthPicker = dialogView.findViewById<NumberPicker>(R.id.monthPicker)
+        val yearPicker = dialogView.findViewById<NumberPicker>(R.id.yearPicker)
+        val allButton = dialogView.findViewById<Button>(R.id.allButton)
+
+        monthPicker.minValue = 1
+        monthPicker.maxValue = 12
+        monthPicker.value = currentMonth + 1
+
+        yearPicker.minValue = 2000
+        yearPicker.maxValue = 2100
+        yearPicker.value = currentYear
+
+        val dialog = AlertDialog.Builder(this)
+            .setTitle("Select Month and Year")
+            .setView(dialogView)
+            .setPositiveButton("OK") { _, _ ->
+                if (selectedDate == null) selectedDate = Calendar.getInstance()
+                selectedDate!!.set(Calendar.YEAR, yearPicker.value)
+                selectedDate!!.set(Calendar.MONTH, monthPicker.value - 1)
+                selectedDate!!.set(Calendar.DAY_OF_MONTH, 1)
+                loadAndDisplayData()
+            }
+            .setNegativeButton("Cancel", null)
+            .create()
+
+        allButton.setOnClickListener {
+            selectedDate = null  // clear filter
+            dialog.dismiss()
             loadAndDisplayData()
-        }, year, month)
+        }
 
         dialog.show()
     }
 
+
     private fun loadAndDisplayData() {
         val utc = TimeZone.getTimeZone("UTC")
 
-        val start = Calendar.getInstance(utc).apply {
-            set(Calendar.DAY_OF_MONTH, 1)
-            set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
+        val start = Calendar.getInstance(utc)
+        val end = Calendar.getInstance(utc)
+
+        if (selectedDate != null) {
+            start.set(Calendar.YEAR, selectedDate!!.get(Calendar.YEAR))
+            start.set(Calendar.MONTH, selectedDate!!.get(Calendar.MONTH))
+            start.set(Calendar.DAY_OF_MONTH, 1)
+            start.set(Calendar.HOUR_OF_DAY, 0)
+            start.set(Calendar.MINUTE, 0)
+            start.set(Calendar.SECOND, 0)
+            start.set(Calendar.MILLISECOND, 0)
+
+            end.time = start.time
+            end.add(Calendar.MONTH, 1)
+
+            Log.d("STATISTICS", "StartMillis: ${start.timeInMillis} (${start.time})")
+            Log.d("STATISTICS", "EndMillis: ${end.timeInMillis} (${end.time})")
+        } else {
+            Log.d("STATISTICS", "No date filtering – showing all expenses")
         }
-
-        val end = Calendar.getInstance(utc).apply {
-            time = start.time
-            add(Calendar.MONTH, 1)
-            set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-        }
-
-        val startMillis = start.timeInMillis
-        val endMillis = end.timeInMillis
-
-        Log.d("STATISTICS", "StartMillis: $startMillis (${start.time})")
-        Log.d("STATISTICS", "EndMillis: $endMillis (${end.time})")
 
         firestore.collection("expenses")
             .whereEqualTo("userId", userId)
@@ -95,10 +171,16 @@ class StatisticsActivity : AppCompatActivity() {
             .addOnSuccessListener { docs ->
                 val allExpenses = docs.mapNotNull { it.toObject(Expense::class.java) }
 
-                // ✅ Фильтрация по миллисекундам локально
-                val filtered = allExpenses.filter { expense ->
-                    val millis = expense.expenseDate?.toDate()?.time ?: 0L
-                    millis in startMillis until endMillis
+                val filtered = if (selectedDate != null) {
+                    val startMillis = start.timeInMillis
+                    val endMillis = end.timeInMillis
+
+                    allExpenses.filter { expense ->
+                        val millis = expense.expenseDate?.toDate()?.time ?: 0L
+                        millis in startMillis until endMillis
+                    }
+                } else {
+                    allExpenses
                 }
 
                 Log.d("STATISTICS", "Filtered expenses: ${filtered.size}")
@@ -113,6 +195,7 @@ class StatisticsActivity : AppCompatActivity() {
                 Log.e("STATISTICS", "Firestore fetch failed: ${it.message}", it)
             }
     }
+
 
     private fun updatePieChart(expenses: List<Expense>) {
         val totalsByCategory = expenses.groupBy { it.category }
