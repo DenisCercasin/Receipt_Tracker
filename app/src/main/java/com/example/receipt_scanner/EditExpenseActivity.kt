@@ -21,6 +21,7 @@ class EditExpenseActivity : AppCompatActivity() {
     private val db = Firebase.firestore
     private lateinit var expenseId: String
 
+    // predefined values
     private val categoryOptions = listOf("Food", "Transport", "Shopping", "Bills", "Health", "Other")
     private val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
     private val calendar = Calendar.getInstance()
@@ -30,7 +31,8 @@ class EditExpenseActivity : AppCompatActivity() {
         binding = ActivityEditExpenseBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Spinner setup
+        // Spinner setup - native calendar dialog
+        // adaptin also the date format
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categoryOptions)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.editCategory.adapter = adapter
@@ -49,7 +51,7 @@ class EditExpenseActivity : AppCompatActivity() {
             ).show()
         }
 
-        // Check mode
+        // Check mode -> if expenseId was passed - we fetch existing expense from Firestor and fill all the values
         expenseId = intent.getStringExtra("expenseId") ?: ""
 
         if (expenseId.isNotEmpty()) {
@@ -59,6 +61,7 @@ class EditExpenseActivity : AppCompatActivity() {
             db.collection("expenses").document(expenseId)
                 .get()
                 .addOnSuccessListener { doc ->
+                    // if exists in firestore - we load the data in these values
                     if (doc != null && doc.exists()) {
                         binding.editAmount.setText(doc.getDouble("amount")?.toString() ?: "")
 
@@ -83,6 +86,7 @@ class EditExpenseActivity : AppCompatActivity() {
             val prefillAmount = intent.getDoubleExtra("prefill_amount", -1.0)
             if (prefillAmount >= 0) binding.editAmount.setText(prefillAmount.toString())
 
+            //  checking if ocr found a date - if not we try parsedatesmart - looking maybe at different formats
             val prefillDate = intent.getStringExtra("prefill_date")
             if (!prefillDate.isNullOrBlank()) {
                 val parsed = parseDateSmart(prefillDate)
@@ -99,13 +103,14 @@ class EditExpenseActivity : AppCompatActivity() {
             }
         }
 
-        // Save button
+        // Save button logic
         binding.saveEditBtn.setOnClickListener {
             val updatedAmount = binding.editAmount.text.toString().toDoubleOrNull()
             val updatedDate = binding.editDate.text.toString()
             val parsedDate = dateFormat.parse(updatedDate)
             val updatedCategory = binding.editCategory.selectedItem.toString()
 
+            // validates that amount and date are OK
             if (updatedAmount == null || parsedDate == null) {
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -118,9 +123,9 @@ class EditExpenseActivity : AppCompatActivity() {
                 "userId" to FirebaseAuth.getInstance().currentUser?.uid,
                 "timestamp" to Timestamp.now()
             )
-
+            // if expenseId is known - we do update in the db
             if (expenseId.isNotEmpty()) {
-                // 🔁 Update existing
+
                 db.collection("expenses").document(expenseId)
                     .update(expenseData)
                     .addOnSuccessListener {
@@ -131,7 +136,8 @@ class EditExpenseActivity : AppCompatActivity() {
                         Toast.makeText(this, "Update failed", Toast.LENGTH_SHORT).show()
                     }
             } else {
-                // 🆕 Create new
+                // if no expenseId is known - then we create one - when from OCR we click on edit
+                // and after it we save
                 db.collection("expenses")
                     .add(expenseData)
                     .addOnSuccessListener {
@@ -145,6 +151,8 @@ class EditExpenseActivity : AppCompatActivity() {
         }
     }
 
+    // function mostly for OCR - so if we didnt get from there a normal datestring then
+    // we check maybe its just in another format
     private fun parseDateSmart(dateString: String): Date? {
         val possibleFormats = listOf(
             "dd.MM.yyyy",

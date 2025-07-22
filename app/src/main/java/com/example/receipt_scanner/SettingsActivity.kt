@@ -29,7 +29,7 @@ class SettingsActivity : AppCompatActivity() {
         supportActionBar?.title = "Settings"
 
 
-        // ✅ Set up drawer toggle
+        // Set up drawer toggle - basically navigation between the screens
         drawerToggle = ActionBarDrawerToggle(
             this,
             findViewById(R.id.drawerLayout),
@@ -40,7 +40,7 @@ class SettingsActivity : AppCompatActivity() {
         findViewById<DrawerLayout>(R.id.drawerLayout).addDrawerListener(drawerToggle)
         drawerToggle.syncState()
 
-        // ✅ Navigation item click handling
+        // where do i go if i click in this navigation bar
         binding.navigationView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_dashboard -> startActivity(Intent(this, DashboardActivity::class.java))
@@ -65,7 +65,7 @@ class SettingsActivity : AppCompatActivity() {
             true
         }
 
-        // ✅ Reset password
+        // if clicked on reset password button
         binding.btnResetPassword.setOnClickListener {
             val userEmail = auth.currentUser?.email
             if (userEmail != null) {
@@ -79,7 +79,7 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
-        // ✅ Logout
+        // if clicked logout button - we firstly doublecheck and then log the person out
         binding.btnLogout.setOnClickListener {
             AlertDialog.Builder(this)
                 .setTitle("Logout")

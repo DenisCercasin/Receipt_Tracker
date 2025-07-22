@@ -32,29 +32,32 @@ class ScanReceiptActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityScanReceiptBinding
 
-    private lateinit var imageUri: Uri
+    private lateinit var imageUri: Uri // path to the photo that user will take
 
+    // all permissions and launchers for starting the camera, gallery
     private lateinit var cameraLauncher: ActivityResultLauncher<Uri>
     private lateinit var galleryLauncher: ActivityResultLauncher<String>
     private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // connecting the layout correspondingly
         binding = ActivityScanReceiptBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.btnScanReceipt.setOnClickListener {
             checkPermissionsAndOpenDialog()
         }
-        // Register camera result
+        // if the user took a photo - call processImageWithOCR
         cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
             if (success) processImageWithOCR(imageUri)
         }
 
-        // Register gallery result
+        // if the user picked a photo from the gallery -> call processImageWithOCR
         galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
             uri?.let { processImageWithOCR(it) }
         }
+
 
         permissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
@@ -85,7 +88,9 @@ class ScanReceiptActivity : AppCompatActivity() {
 
     }
 
-
+    // checking if there is a permission for the camera and gallery
+    // if all yes -> choose between camera and gallery
+    // if no -> open the dialog and redirect to the settings
     private fun checkPermissionsAndOpenDialog() {
         val cameraPermission = Manifest.permission.CAMERA
 
@@ -101,7 +106,7 @@ class ScanReceiptActivity : AppCompatActivity() {
         }
 
 
-
+    // showing which options the user has
     private fun showImageSourceDialog() {
         val options = arrayOf("Take Photo", "Choose from Gallery")
 
@@ -117,6 +122,7 @@ class ScanReceiptActivity : AppCompatActivity() {
     }
 
     private fun openCamera() {
+        // temporary file, opens up the camera and take a photo -> give system path via FileProvider
         val photoFile = File.createTempFile("receipt_", ".jpg", cacheDir)
         imageUri = FileProvider.getUriForFile(this, "${packageName}.provider", photoFile)
         cameraLauncher.launch(imageUri)
@@ -126,6 +132,9 @@ class ScanReceiptActivity : AppCompatActivity() {
         galleryLauncher.launch("image/*")
     }
 
+    // all magic starts here
+    // we start and show the loader
+    // we get the image, and transfer it in InputImage class
     private fun processImageWithOCR(uri: Uri) {
         binding.progressBar.visibility = View.VISIBLE  // ⏳ Show loader
         val image: InputImage
@@ -136,12 +145,13 @@ class ScanReceiptActivity : AppCompatActivity() {
             Toast.makeText(this, "Failed to load image", Toast.LENGTH_SHORT).show()
             return
         }
-
         val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 
+        // we pass the image through the ML Kit
         recognizer.process(image)
             .addOnSuccessListener { visionText ->
-                binding.progressBar.visibility = View.GONE  // ✅ Hide loader
+                // if it was succesful -> we save all the text in recognizedText
+                binding.progressBar.visibility = View.GONE
                 val recognizedText = visionText.text
                 Log.d("OCR", "Recognized Text: ${recognizedText}")
 
@@ -150,6 +160,7 @@ class ScanReceiptActivity : AppCompatActivity() {
                     return@addOnSuccessListener
                 }
 
+                // trying to extract amount, date and category
                 val amount = extractAmount(recognizedText)
                 val date = extractDate(recognizedText)
                 val category = guessCategoryFromText(recognizedText)
@@ -157,17 +168,20 @@ class ScanReceiptActivity : AppCompatActivity() {
                 if (amount != null) {
                     showConfirmationDialog(amount, date, category)
                     showSuccess("Amount found: €$amount")
-                    // TODO: proceed to category extraction or save
-                } else {
 
                 }
             }
             .addOnFailureListener {
-                binding.progressBar.visibility = View.GONE  // ❌ Hide loader on error
+                binding.progressBar.visibility = View.GONE
                 showError("OCR failed: ${it.message}")
             }
     }
 
+    // helper fumction
+    // goes through all the lines
+    // searches for the lines with € or EUR
+    // uses regex for looking for typical summs xx.yy
+    // normalizes the amount -> deletes the points and commas to dots
     private fun extractAmount(text: String): Double? {
         val euroAmounts = mutableListOf<Double>()
 
@@ -189,7 +203,7 @@ class ScanReceiptActivity : AppCompatActivity() {
         }
         Log.d("OCR", "Recognized amountsssss: ${euroAmounts}")
 
-        // 🧠 If we found nothing with €, fallback: pick highest raw-looking number
+        // if we found nothing with €, fallback: pick highest raw-looking number
         if (euroAmounts.isEmpty()) {
             val fallbackPattern = Regex("""(\d{1,3}(?:[.,]\d{3})*[.,]\d{2})""")
             for (match in fallbackPattern.findAll(text)) {
@@ -201,36 +215,41 @@ class ScanReceiptActivity : AppCompatActivity() {
             }
         }
 
-        // ✅ Return the highest amount found
+        // return the highest amount found from our list
         return euroAmounts.maxOrNull()
     }
 
+    // helper function -> searches for date templates with regex
     private fun extractDate(text: String): String? {
         val pattern = Regex("""\d{2}[./-]\d{2}[./-]\d{4}""")
         return pattern.find(text)?.value
     }
 
+    // funny function
+    // we lower all the case and then trying to guess which category it is
+    // basically we just go through all the lists and items and look if there is a match
     private fun guessCategoryFromText(text: String): String {
         val lowerText = text.lowercase()
 
         return when {
-            // 🥦 Food
+            // Food
             listOf("edeka", "rewe", "aldi", "lidl", "kaufland", "bäcker", "cafe", "restaurant", "imbiss", "essen", "snack").any { it in lowerText } -> "Food"
 
-            // 🚗 Transport
+            // Transport
             listOf("bahn", "db", "ticket", "ubahn", "bus", "fahrkarte", "taxi", "moia", "vbb").any { it in lowerText } -> "Transport"
 
-            // 🛍️ Shopping
+            // 🛍Shopping
             listOf("h&m", "zara", "primark", "dm", "rossmann", "media markt", "saturn", "elektronik", "kleidung").any { it in lowerText } -> "Shopping"
 
-            // 🏥 Health
+            // Health
             listOf("apotheke", "arzt", "praxis", "rezept", "medikament", "gesundheit", "zahnarzt").any { it in lowerText } -> "Health"
 
-            // ❓ Other
+            // Other
             else -> "Other"
         }
     }
 
+    // helper -> error message
     private fun showError(message: String) {
         AlertDialog.Builder(this)
             .setTitle("Error")
@@ -239,16 +258,16 @@ class ScanReceiptActivity : AppCompatActivity() {
             .show()
     }
 
+    // helper -> success message
     private fun showSuccess(message: String) {
         AlertDialog.Builder(this)
             .setTitle("Success")
             .setMessage(message)
-            .setPositiveButton("Continue") { _, _ ->
-                // TODO: Save to Firestore or classify category
-            }
+            .setPositiveButton("Continue", null)
             .show()
     }
 
+    // if the camera is disabled forever -> open settings
     private fun showPermissionSettingsDialog() {
         AlertDialog.Builder(this)
             .setTitle("Permission Required")
@@ -263,6 +282,8 @@ class ScanReceiptActivity : AppCompatActivity() {
             .show()
     }
 
+    // when the OCR fully done, all values extracted -> we ask the user what to do
+    // save directly, edit or cancel
     private fun showConfirmationDialog(amount: Double, date: String?, category: String) {
         val message = buildString {
             append("We extracted the following:\n\n")
@@ -285,6 +306,7 @@ class ScanReceiptActivity : AppCompatActivity() {
             .show()
     }
 
+    // if save clicked -> then we save in db the expense and redirect to dashboard
     private fun saveToFirebase(amount: Double, category: String, dateString: String?) {
         val db = Firebase.firestore
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: "unknown"
@@ -308,7 +330,7 @@ class ScanReceiptActivity : AppCompatActivity() {
                     .add(expense)
                     .addOnSuccessListener {
                         Toast.makeText(this, "Saved to Firebase!", Toast.LENGTH_SHORT).show()
-                        finish()
+                        finish() // screen is closed -> so we go to the previous one where we were
                     }
                     .addOnFailureListener { e ->
                         Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -325,7 +347,7 @@ class ScanReceiptActivity : AppCompatActivity() {
         }
 
 
-
+    // if edit clicked -> redirect to edit expense screen with all values prefilled
     private fun openManualEntryScreen(amount: Double, category: String,dateString: String?) {
         val intent = Intent(this, EditExpenseActivity::class.java).apply {
             putExtra("prefill_amount", amount)
@@ -349,11 +371,11 @@ class ScanReceiptActivity : AppCompatActivity() {
                 val formatter = SimpleDateFormat(format, Locale.getDefault())
                 return formatter.parse(dateString)
             } catch (_: Exception) {
-                // Игнорируем и пробуем следующий
+
             }
         }
 
-        return null // Не удалось распарсить
+        return null
     }
 }
 

@@ -1,16 +1,14 @@
 package com.example.receipt_scanner
 
-import android.os.Bundle
 import android.widget.FrameLayout
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 
+// abstract so wraps every child screen inside a common layout
+// so every child nests activity_base.xml → includes → activity_dashboard.xml
 abstract class BaseActivity : AppCompatActivity() {
 
     override fun setContentView(layoutResID: Int) {
-        // Inflate your base layout with background
+        // Inflate your base layout with background from activity_base.xml
         val baseLayout = layoutInflater.inflate(R.layout.activity_base, null)
         val container = baseLayout.findViewById<FrameLayout>(R.id.baseContainer)
 

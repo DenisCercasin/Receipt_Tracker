@@ -6,7 +6,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.receipt_scanner.databinding.ActivityRegisterBinding
-
+// All logic similar to login
 class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -14,6 +14,7 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.title = "Register"
 
+        // have account -> log in
         binding.loginTV.setOnClickListener{
             startActivity(Intent(this, LoginActivity::class.java))
             finish()

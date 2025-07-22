@@ -29,6 +29,8 @@ class HistoryActivity : AppCompatActivity() {
     private val db = Firebase.firestore
     private val expenses = mutableListOf<Expense>()
     private lateinit var adapter: ExpenseAdapter
+
+    // both are used for filtering
     private var selectedMonth: YearMonth? = null
     private var selectedCategory: String = "All"
     private lateinit var drawerToggle: ActionBarDrawerToggle
@@ -39,12 +41,12 @@ class HistoryActivity : AppCompatActivity() {
         binding = ActivityHistoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // ✅ Setup Toolbar as ActionBar
+        // Setup Toolbar as ActionBar + text on the top
         setSupportActionBar(binding.topAppBar)
         supportActionBar?.title = "History"
 
 
-        // ✅ Setup Drawer Toggle
+        // Setup Drawer Toggle
         drawerToggle = ActionBarDrawerToggle(
             this,
             binding.drawerLayout,
@@ -55,7 +57,7 @@ class HistoryActivity : AppCompatActivity() {
         binding.drawerLayout.addDrawerListener(drawerToggle)
         drawerToggle.syncState()
 
-        // ✅ Navigation item clicks
+        // Where can i go from the navigation bar basically
         binding.navigationView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_dashboard -> startActivity(Intent(this, DashboardActivity::class.java))
@@ -86,11 +88,13 @@ class HistoryActivity : AppCompatActivity() {
 
         adapter = ExpenseAdapter(
             expenses,
+            // if you click on expense
             onClick = { expense ->
                 val intent = Intent(this, EditExpenseActivity::class.java)
                 intent.putExtra("expenseId", expense.id)
                 startActivity(intent)
             },
+            // if long click -> delete the expense?
             onLongClick = { expense ->
                 AlertDialog.Builder(this)
                     .setTitle("Delete Expense")
@@ -118,11 +122,14 @@ class HistoryActivity : AppCompatActivity() {
     }
 
     private fun setupSpinner() {
+        // getting list of all categories from strings.xml
         val categories = resources.getStringArray(R.array.expense_categories)
         val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        // connects the spinner (dropdown) to those options
         binding.categoryFilter.adapter = spinnerAdapter
 
+        // if a user selects a category → update the variable → call loadExpenses() again
         binding.categoryFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 selectedCategory = parent.getItemAtPosition(position).toString()
@@ -134,6 +141,9 @@ class HistoryActivity : AppCompatActivity() {
     }
 
     private fun setupDatePicker() {
+        // When the "Choose Month" button is clicked → open a custom dialog with showMonthYearPicker
+        // user selects a month
+        // this value is saved as a YearMonth and passed to loadExpenses() to apply the filter
         binding.dateFilterBtn.setOnClickListener {
             showMonthYearPicker { selected ->
                 selectedMonth = selected
@@ -143,6 +153,8 @@ class HistoryActivity : AppCompatActivity() {
     }
 
     private fun showMonthYearPicker(onDateSelected: (YearMonth?) -> Unit) {
+
+        // creating this cool widget with choosing a month and a year
         val calendar = Calendar.getInstance()
         val currentYear = calendar.get(Calendar.YEAR)
         val currentMonth = calendar.get(Calendar.MONTH)
@@ -173,6 +185,7 @@ class HistoryActivity : AppCompatActivity() {
             .setNegativeButton("Cancel", null)
             .create()
 
+        // if all is choosen - then it means no filter
         allButton.setOnClickListener {
             Log.d("MonthYearPicker", "Selected: All")
             dialog.dismiss()
@@ -181,14 +194,17 @@ class HistoryActivity : AppCompatActivity() {
             dialog.show()
     }
 
+    // pulls data from the expenses collection in firebase
     private fun loadExpenses() {
         Log.d("Filter", "Loading for category: $selectedCategory and month: $selectedMonth")
 
+        // fetches only if the user is logged-in
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
 
         var query = db.collection("expenses")
             .whereEqualTo("userId", userId)
 
+        // filtering by category
         if (selectedCategory != "All") {
             query = query.whereEqualTo("category", selectedCategory)
         }
@@ -198,9 +214,11 @@ class HistoryActivity : AppCompatActivity() {
             .addOnSuccessListener { result ->
                 expenses.clear()
                 for (document in result) {
+                    // turn the document into an Expense model.
                     val expense = document.toObject(Expense::class.java)
                     expense.id = document.id
 
+                    // if there is a month filter
                     if (selectedMonth != null) {
                         val calendar = Calendar.getInstance()
                         calendar.time = expense.expenseDate!!.toDate()
@@ -208,6 +226,7 @@ class HistoryActivity : AppCompatActivity() {
                         val expenseMonth = calendar.get(Calendar.MONTH) + 1
                         val expenseYear = calendar.get(Calendar.YEAR)
 
+                        // If the expense is NOT from the selected month OR year -> then skip this expense
                         if (expenseMonth != selectedMonth!!.monthValue || expenseYear != selectedMonth!!.year) {
                             continue
                         }
@@ -215,11 +234,12 @@ class HistoryActivity : AppCompatActivity() {
 
                     expenses.add(expense)
                 }
+                // it adds the matching expenses to the list and updates the UI
                 adapter.notifyDataSetChanged()
             }
     }
 
-    override fun onResume() {
+    override fun onResume() { // when we come back to the screen, after editing/deleting -> reload everything
         super.onResume()
         loadExpenses()
     }

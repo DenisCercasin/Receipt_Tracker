@@ -57,7 +57,7 @@ class StatisticsActivity : AppCompatActivity() {
         supportActionBar?.title = "Statistics"
 
 
-// Set up drawer toggle
+        // Set up drawer toggle
         drawerToggle = ActionBarDrawerToggle(
             this,
             findViewById(R.id.drawerLayout),
@@ -68,7 +68,7 @@ class StatisticsActivity : AppCompatActivity() {
         findViewById<DrawerLayout>(R.id.drawerLayout).addDrawerListener(drawerToggle)
         drawerToggle.syncState()
 
-// Set up navigation
+// Set up navigation - where can i go from my navigation bar
         findViewById<NavigationView>(R.id.navigationView).setNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_dashboard -> startActivity(Intent(this, DashboardActivity::class.java))
@@ -92,14 +92,15 @@ class StatisticsActivity : AppCompatActivity() {
             findViewById<DrawerLayout>(R.id.drawerLayout).closeDrawers()
             true
         }
-
+        // used for filtering
         btnSelectMonth.setOnClickListener {
+            // 2 pickers only -> month + year and ALL button as kinda easy reset
             showMonthPicker()
         }
 
         loadAndDisplayData()
     }
-
+    // creating this month/year picker + all button
     private fun showMonthPicker() {
         val calendar = Calendar.getInstance()
         val currentYear = calendar.get(Calendar.YEAR)
@@ -142,11 +143,13 @@ class StatisticsActivity : AppCompatActivity() {
 
 
     private fun loadAndDisplayData() {
+        // not to mess up
         val utc = TimeZone.getTimeZone("UTC")
 
         val start = Calendar.getInstance(utc)
         val end = Calendar.getInstance(utc)
 
+        // filtering -> beginning and end of the month needed
         if (selectedDate != null) {
             start.set(Calendar.YEAR, selectedDate!!.get(Calendar.YEAR))
             start.set(Calendar.MONTH, selectedDate!!.get(Calendar.MONTH))
@@ -165,6 +168,7 @@ class StatisticsActivity : AppCompatActivity() {
             Log.d("STATISTICS", "No date filtering – showing all expenses")
         }
 
+        // loading all the data from the firestore, filtering then by month
         firestore.collection("expenses")
             .whereEqualTo("userId", userId)
             .get()
@@ -198,6 +202,7 @@ class StatisticsActivity : AppCompatActivity() {
 
 
     private fun updatePieChart(expenses: List<Expense>) {
+        // grouping all expenses by category and then creating piechart with  categories and sums
         val totalsByCategory = expenses.groupBy { it.category }
             .mapValues { entry -> entry.value.sumOf { it.amount } }
 
@@ -217,6 +222,8 @@ class StatisticsActivity : AppCompatActivity() {
     }
 
     private fun updateBarChartGrouped(expenses: List<Expense>) {
+        // showing the expenses by weeks and days of the week
+        // map all day>week>sum
         val grouped = mutableMapOf<Int, MutableMap<Int, Double>>() // dayOfWeek -> weekOfMonth -> amount
 
         for (expense in expenses) {
@@ -229,7 +236,7 @@ class StatisticsActivity : AppCompatActivity() {
             val weekMap = grouped.getOrPut(dayOfWeek) { mutableMapOf() }
             weekMap[weekOfMonth] = weekMap.getOrDefault(weekOfMonth, 0.0) + expense.amount
         }
-
+        // creating 4 weeks, later will be 4 sets for the bardataset
         val week1 = mutableListOf<BarEntry>()
         val week2 = mutableListOf<BarEntry>()
         val week3 = mutableListOf<BarEntry>()
@@ -247,6 +254,7 @@ class StatisticsActivity : AppCompatActivity() {
         val set3 = BarDataSet(week3, "Week 3")
         val set4 = BarDataSet(week4, "Week 4")
 
+        // colors, height etc
         set1.color = "#2196F3".toColorInt() // Blue
         set2.color = "#F44336".toColorInt() // Red
         set3.color = "#4CAF50".toColorInt() // Green
