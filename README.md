@@ -102,6 +102,37 @@ In future iterations, it will be localized to meet the needs of the originally i
 
 ---
 
+## First-Time Usage Notes
+
+If you are running the app for the **first time** on an emulator, please note the following:
+
+1. **Camera Permission**  
+   - When you try to scan a receipt for the first time, the app may show a message that it has no permission to access the camera.  
+   - Usually, there will be a "Go to Settings" button in the message. Tap it, grant "Allow while using the app" permission, then return to the app.  
+   - Press **Scan Receipt** again – it should now work.
+
+2. **Test Receipts Provided**  
+   - The repository contains a folder [`/test_receipts`](test_receipts/) with 3 AI-generated sample receipts you can use for testing.
+   - These receipts are dated July, so when scanned, the ML Kit will correctly recognize them as July expenses.  
+   - Important: Since the dashboard shows totals for the current month, scanning July receipts will not change the current month’s balance. You can still verify they are saved correctly in the History view.
+
+3. **Scanning a Receipt – Photo or Gallery**  
+   - When tapping **Scan Receipt**, you can either:
+     - Take a photo using the camera, or
+     - Choose from gallery.
+   - On a **new emulator**, the gallery will likely be empty.
+
+4. **Adding Images to Emulator Gallery**  
+   - Open the gallery app inside the emulator.  
+   - Drag and drop a test receipt image (from `/test_receipts`) into the emulator window.  
+   - The image will appear in the emulator’s Downloads folder.  
+   - Go back to the app → press "Scan Receipt" → choose "From Gallery" → navigate to "Browse → Downloads" to select the image.
+
+5. **Password Reset Emails**  
+   - If you use the password reset feature, please check your Spam/Junk folder as the email might be filtered there.
+
+---
+
 ## Next Ideas
 
 - Cloud synchronization for multi-device usage with user-specific settings.
