@@ -58,21 +58,25 @@ class ScanReceiptActivity : AppCompatActivity() {
             uri?.let { processImageWithOCR(it) }
         }
 
-
+        // launcher to request multiple permissions (in this case: Camera)
         permissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
         ) { permissions ->
+            // check if camera permission was granted
             val cameraGranted = permissions[Manifest.permission.CAMERA] == true
 
             when {
+                // camera permission granted → show dialog to choose image source (camera or gallery)
                 cameraGranted -> {
                     showImageSourceDialog()
                 }
 
+                // permission permanently denied → guide user to app settings
                 !shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
                     showPermissionSettingsDialog()
                 }
 
+                // permission temporarily denied → show dialog with retry option
                 else -> {
                     AlertDialog.Builder(this)
                         .setTitle("Permission Denied")
@@ -96,11 +100,13 @@ class ScanReceiptActivity : AppCompatActivity() {
 
         val isCameraGranted = ContextCompat.checkSelfPermission(this, cameraPermission) == PackageManager.PERMISSION_GRANTED
 
+        // permission granted -> proceed to choose image
         if (isCameraGranted) {
             showImageSourceDialog()
         } else if (!shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
             showPermissionSettingsDialog()
         } else {
+            // permission can be requested
             permissionLauncher.launch(arrayOf(Manifest.permission.CAMERA))
         }
         }
