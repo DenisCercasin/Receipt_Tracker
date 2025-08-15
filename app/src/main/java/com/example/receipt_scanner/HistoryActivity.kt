@@ -8,6 +8,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.NumberPicker
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
@@ -45,6 +46,11 @@ class HistoryActivity : AppCompatActivity() {
         setSupportActionBar(binding.topAppBar)
         supportActionBar?.title = "History"
 
+        // dynamically set email in drawer header
+        val headerView = binding.navigationView.getHeaderView(0)
+        val emailTextView = headerView.findViewById<TextView>(R.id.headerUserEmail)
+        val currentUser = com.example.receipt_scanner.MainActivity.auth.currentUser
+        emailTextView.text = "Hello, ${currentUser?.email ?: "Guest"}"
 
         // Setup Drawer Toggle
         drawerToggle = ActionBarDrawerToggle(
