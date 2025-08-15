@@ -133,6 +133,27 @@ If you are running the app for the **first time** on an emulator, please note th
 
 ---
 
+## System Workflow (Sequence Diagram)
+
+To illustrate the detailed flow of user interactions and system operations, a sequence diagram has been prepared for this project.
+
+- **Formats available:**
+  - [View PNG](docs/sequence_diagram.png) – Quick preview
+  - [Download SVG](docs/sequence_diagram.svg) – Scalable vector format for detailed inspection
+
+**Embedded Preview (PNG):**
+![Sequence Diagram Preview](docs/sequence_diagram.png)
+
+The diagram covers:
+- User authentication (login/register)
+- Receipt scanning process (camera or gallery)
+- OCR text extraction and amount parsing
+- Category assignment logic
+- Data storage in Firebase Firestore
+- Display in history and statistics screens
+
+---
+
 ## Next Ideas
 
 - Cloud synchronization for multi-device usage with user-specific settings.
