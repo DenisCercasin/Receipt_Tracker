@@ -3,6 +3,7 @@ package com.example.receipt_scanner
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -28,6 +29,11 @@ class SettingsActivity : AppCompatActivity() {
         setSupportActionBar(topAppBar)
         supportActionBar?.title = "Settings"
 
+        // dynamically set email in drawer header
+        val headerView = binding.navigationView.getHeaderView(0)
+        val emailTextView = headerView.findViewById<TextView>(R.id.headerUserEmail)
+        val currentUser = com.example.receipt_scanner.MainActivity.auth.currentUser
+        emailTextView.text = "Hello, ${currentUser?.email ?: "Guest"}"
 
         // Set up drawer toggle - basically navigation between the screens
         drawerToggle = ActionBarDrawerToggle(
