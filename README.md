@@ -10,6 +10,31 @@
 
 ---
 
+## Table of Contents
+- [Receipt Tracker](#-receipt-tracker)
+- [Goal](#goal)
+- [Description](#description)
+- [Main Features](#main-features)
+- [Contributor](#contributor)
+- [Target Users & Background Motivation](#target-users--background-motivation)
+- [Scope](#scope)
+- [How to Run](#how-to-run)
+  - [Option 1 – Run from Source (Android Studio)](#option-1--run-from-source-android-studio)
+  - [Option 2 – Install via APK](#option-2--install-via-apk)
+- [First-Time Usage Notes](#first-time-usage-notes)
+  - [Camera Permission](#camera-permission)
+  - [Test Receipts Provided](#test-receipts-provided)
+  - [Scanning a Receipt – Photo or Gallery](#scanning-a-receipt--photo-or-gallery)
+  - [Adding Images to Emulator Gallery](#adding-images-to-emulator-gallery)
+  - [Password Reset Emails](#password-reset-emails)
+- [System Workflow (Sequence Diagram)](#system-workflow-sequence-diagram)
+- [Next Ideas](#next-ideas)
+- [Limitations](#limitations)
+- [License](#license)
+
+
+---
+
 ## Goal
 
 The aim of this project is to design and implement a fully functional Android application that enables users to scan receipts, automatically detect expense amounts, categorize spending, and analyze expenses through visual statistics.  
@@ -23,7 +48,10 @@ This project fulfills the requirements of the module by integrating multiple fun
 The app uses **ML Kit’s offline OCR** to extract text from scanned receipts, detects amounts via **regular expressions**, and assigns categories automatically using keyword logic.  
 All data is stored remotely using **Firebase Firestore** and can be viewed in detailed monthly statistics with **MPAndroidChart** visualizations.
 
-**Main Features:**
+---
+
+## Main Features
+
 - **Receipt Scanning:** Use the device camera to capture receipts.
 - **Offline OCR Recognition:** ML Kit’s on-device text recognition extracts amounts without an internet connection.
 - **Automatic Categorization:** Assigns categories (e.g., Groceries, Fuel) based on keywords.
@@ -106,29 +134,29 @@ In future iterations, it will be localized to meet the needs of the originally i
 
 If you are running the app for the **first time** on an emulator, please note the following:
 
-1. **Camera Permission**  
+### Camera Permission  
    - When you try to scan a receipt for the first time, the app may show a message that it has no permission to access the camera.  
    - Usually, there will be a "Go to Settings" button in the message. Tap it, grant "Allow while using the app" permission, then return to the app.  
    - Press **Scan Receipt** again – it should now work.
 
-2. **Test Receipts Provided**  
+### Test Receipts Provided  
    - The repository contains a folder [`/test_receipts`](test_receipts/) with 3 AI-generated sample receipts you can use for testing.
    - These receipts are dated July, so when scanned, the ML Kit will correctly recognize them as July expenses.  
    - Important: Since the dashboard shows totals for the current month, scanning July receipts will not change the current month’s balance. You can still verify they are saved correctly in the History view.
 
-3. **Scanning a Receipt – Photo or Gallery**  
+### Scanning a Receipt – Photo or Gallery  
    - When tapping **Scan Receipt**, you can either:
      - Take a photo using the camera, or
      - Choose from gallery.
    - On a **new emulator**, the gallery will likely be empty.
 
-4. **Adding Images to Emulator Gallery**  
+### Adding Images to Emulator Gallery  
    - Open the gallery app inside the emulator.  
    - Drag and drop a test receipt image (from `/test_receipts`) into the emulator window.  
    - The image will appear in the emulator’s Downloads folder.  
    - Go back to the app → press "Scan Receipt" → choose "From Gallery" → navigate to "Browse → Downloads" to select the image.
 
-5. **Password Reset Emails**  
+### Password Reset Emails
    - If you use the password reset feature, please check your Spam/Junk folder as the email might be filtered there.
 
 ---
